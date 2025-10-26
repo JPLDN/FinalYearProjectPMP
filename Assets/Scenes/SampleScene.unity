@@ -316,13 +316,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 832b7ceaf9ec4464a8a3f62ee43671a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 6.5
   jumpForce: 12
   groundCheck: {fileID: 381698280}
   groundRadius: 0.2
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  coyoteTime: 0.15
+  jumpBufferTime: 0.1
 --- !u!50 &415030919
 Rigidbody2D:
   serializedVersion: 5

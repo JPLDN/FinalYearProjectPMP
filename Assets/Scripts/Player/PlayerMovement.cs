@@ -2,17 +2,26 @@ using UnityEngine;
 
 public class NewMonoBehaviourScript : MonoBehaviour
 {
+    // Movement
     public float moveSpeed = 5f;
     public float jumpForce = 12f;
 
+    // Ground check
     public Transform groundCheck;
     public float groundRadius = 0.2f;
     public LayerMask groundLayer;
-    private bool isGrounded;
+
+    // Jump Refinements
+    public float coyoteTime = 0.15f;
+    public float jumpBufferTime = 0.1f;
+
+    private float coyoteTimeCounter;
+    private float jumpBufferCounter;
 
     private Rigidbody2D rb;
     private float moveInput;
     private bool facingRight = true;
+    private bool isGrounded;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -37,9 +46,28 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (isGrounded)
+        {
+            coyoteTimeCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpBufferCounter = jumpBufferTime;
+        }
+        else
+        {
+            jumpBufferCounter -= Time.deltaTime;
+        }
+
+        if (jumpBufferCounter > 0f && coyoteTimeCounter > 0f)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            jumpBufferCounter = 0f;
         }
     }
 
