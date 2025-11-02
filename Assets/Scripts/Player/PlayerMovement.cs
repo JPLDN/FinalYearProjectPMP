@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     // Movement
     public float moveSpeed = 5f;
@@ -44,7 +44,8 @@ public class NewMonoBehaviourScript : MonoBehaviour
             Flip();
         }
 
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
+        RaycastHit2D hit = Physics2D.Raycast(groundCheck.position, Vector2.down, groundRadius, groundLayer);
+        isGrounded = hit.collider != null;
 
         if (isGrounded)
         {
