@@ -11,7 +11,7 @@ public class PlayerGlitchPhase : MonoBehaviour
     public LayerMask obstacleLayer;
     public float wallStopOffset = 0.08f;
 
-    public SpriteRenderer spriteRenderer;
+    private SpriteRenderer spriteRenderer;
     public Color dashColor = Color.cyan;
 
     private Rigidbody2D rb;
