@@ -770,6 +770,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 6.5
+  sprintSpeed: 9
   jumpForce: 12
   groundCheck: {fileID: 381698280}
   groundRadius: 0.2

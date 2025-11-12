@@ -21,10 +21,7 @@ public class CorruptionMetre : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            AddCorruption(20f);
-        }
+        
     }
     
     public void AddCorruption(float amount)

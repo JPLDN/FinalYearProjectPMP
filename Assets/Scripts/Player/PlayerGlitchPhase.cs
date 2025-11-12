@@ -32,7 +32,7 @@ public class PlayerGlitchPhase : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && !isDashing)
+        if (Input.GetKeyDown(KeyCode.J) && canDash && !isDashing)
         {
             StartCoroutine(DoDash());
         }

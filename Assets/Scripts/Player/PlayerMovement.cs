@@ -4,6 +4,7 @@ public class PlayerMovement : MonoBehaviour
 {
     // Movement
     public float moveSpeed = 5f;
+    public float sprintSpeed = 8f;
     public float jumpForce = 12f;
 
     // Ground check
@@ -22,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     private float moveInput;
     private bool facingRight = true;
     private bool isGrounded;
+    private bool isSprinting = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -32,8 +34,12 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        bool isSprinting = Input.GetKey(KeyCode.LeftShift);
+
         moveInput = Input.GetAxisRaw("Horizontal");
-        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+
+        float currentSpeed = isSprinting ? sprintSpeed : moveSpeed;
+        rb.linearVelocity = new Vector2(moveInput * currentSpeed, rb.linearVelocity.y);
 
         if (moveInput > 0 && !facingRight)
         {
