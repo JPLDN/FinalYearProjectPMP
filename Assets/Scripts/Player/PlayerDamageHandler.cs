@@ -10,7 +10,7 @@ public class PlayerDamageHandler : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        corruptionMetre = FindObjectOfType<CorruptionMetre>();
+        corruptionMetre = GetComponent<CorruptionMetre>();
         glitchPhase = GetComponent<PlayerGlitchPhase>();
     }
 
@@ -24,7 +24,7 @@ public class PlayerDamageHandler : MonoBehaviour
     {
         if (collision.collider.CompareTag("Enemy") || collision.collider.CompareTag("Hazard"))
         {
-            if (!glitchPhase != null && glitchPhase.IsInvincible())
+            if (glitchPhase != null && glitchPhase.IsInvincible())
             {
                 Debug.Log("Player is invincible, no damage taken.");
                 return;
