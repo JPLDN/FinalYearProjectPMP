@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // Movement
+    [Header("Player Movement")]
     public float moveSpeed = 5f;
     public float sprintSpeed = 8f;
     public float jumpForce = 12f;
 
-    // Ground check
+    [Header("Ground Check")]
     public Transform groundCheck;
     public float groundRadius = 0.2f;
     public LayerMask groundLayer;
 
-    // Jump Refinements
+    [Header("Jump Refinements")]
     public float coyoteTime = 0.15f;
     public float jumpBufferTime = 0.1f;
 
@@ -39,7 +39,10 @@ public class PlayerMovement : MonoBehaviour
         moveInput = Input.GetAxisRaw("Horizontal");
 
         float currentSpeed = isSprinting ? sprintSpeed : moveSpeed;
-        rb.linearVelocity = new Vector2(moveInput * currentSpeed, rb.linearVelocity.y);
+        if (!GetComponent<PlayerDamageHandler>().isBeingKnockedBack)
+        {
+            rb.linearVelocity = new Vector2(moveInput * currentSpeed, rb.linearVelocity.y);
+        }
 
         if (moveInput > 0 && !facingRight)
         {

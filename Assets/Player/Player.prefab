@@ -185,6 +185,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   corruptionPerHit: 20
+  knockBackForce: 10
+  knockBackUpForce: 5
+  knockBackDuration: 0.5
+  isBeingKnockedBack: 0
+  flashDuration: 0.2
 --- !u!96 &4870603471095585687
 TrailRenderer:
   serializedVersion: 3
@@ -409,7 +414,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 3cb47516efd641d429406a0a5265f487, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

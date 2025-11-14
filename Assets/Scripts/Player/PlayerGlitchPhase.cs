@@ -3,14 +3,17 @@ using System.Collections;
 
 public class PlayerGlitchPhase : MonoBehaviour
 {
+    [Header("Dash Mechanics")]
     public float dashSpeed = 30f;
     public float dashDuration = 0.15f;
     public float dashCooldown = 1.2f;
     public float invincibilityTime = 0.18f;
 
+    [Header("Wall Collisions")]
     public LayerMask obstacleLayer;
     public float wallStopOffset = 0.08f;
 
+    [Header("Sprite Stuff")]
     private SpriteRenderer spriteRenderer;
     public Color dashColor = Color.cyan;
 

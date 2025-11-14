@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class CorruptionMetre : MonoBehaviour
 {
+    [Header("Corruption Value")]
     public float maxCorruption = 100f;
     public float currentCorruption = 0f;
 
