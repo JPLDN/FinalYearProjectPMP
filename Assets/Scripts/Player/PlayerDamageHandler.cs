@@ -16,6 +16,10 @@ public class PlayerDamageHandler : MonoBehaviour
     [HideInInspector]
     public bool isBeingKnockedBack = false;
 
+    [Header("Flicker Config")]
+    public float flickerDuration = 0.5f;
+    public float flickerSpeed = 0.2f;
+
     [Header("Flash Effect")]
     public float flashDuration = 0.2f;
     private SpriteRenderer sr;
@@ -57,6 +61,22 @@ public class PlayerDamageHandler : MonoBehaviour
         }
     }
 
+    private IEnumerator HitFlicker()
+    {
+        float elapsed = 0f;
+
+        while (elapsed < flickerDuration)
+        {
+            sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0.2f); // go invisible
+            yield return new WaitForSeconds(flickerSpeed);
+
+            sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f); // go visible
+            yield return new WaitForSeconds(flickerSpeed);
+
+            elapsed += flickerSpeed * 2f;
+        }
+    }
+
     public void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.CompareTag("Enemy") || collision.collider.CompareTag("Hazard"))
@@ -73,6 +93,7 @@ public class PlayerDamageHandler : MonoBehaviour
                 Debug.Log("Player took damage, corruption increased.");
             }
 
+            StartCoroutine(HitFlicker());
             StartCoroutine(HitFlash());
             Vector2 knockDir = (transform.position - collision.transform.position).normalized;
             StartCoroutine(Knockback(knockDir));
