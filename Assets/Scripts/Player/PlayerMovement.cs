@@ -16,6 +16,11 @@ public class PlayerMovement : MonoBehaviour
     public float coyoteTime = 0.15f;
     public float jumpBufferTime = 0.1f;
 
+    [Header("Jump Gravity")]
+    public float normalGravity = 2f;
+    public float fallGravity = 4.5f;
+    public float jumpCutGravity = 3f;
+
     private float coyoteTimeCounter;
     private float jumpBufferCounter;
 
@@ -29,6 +34,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        rb.gravityScale = normalGravity;
     }
 
     // Update is called once per frame
@@ -48,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Flip();
         }
-        else if (moveInput < 0 && !facingRight)
+        else if (moveInput < 0 && facingRight)
         {
             Flip();
         }
@@ -79,6 +85,20 @@ public class PlayerMovement : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             jumpBufferCounter = 0f;
         }
+
+        if (!Input.GetKey(KeyCode.Space) && rb.linearVelocity.y > 0.5f)
+        {
+            rb.gravityScale = jumpCutGravity;
+        }
+        else if(rb.linearVelocity.y < 0)
+        {
+            rb.gravityScale = fallGravity;
+        }
+        else
+        {
+            rb.gravityScale = normalGravity;
+        }
+
     }
 
     void Flip()
