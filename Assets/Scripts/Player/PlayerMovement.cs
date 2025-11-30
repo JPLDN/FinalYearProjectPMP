@@ -21,6 +21,10 @@ public class PlayerMovement : MonoBehaviour
     public float fallGravity = 4.5f;
     public float jumpCutGravity = 3f;
 
+    [Header("Apex Control")]
+    public float apexThreshold = 0.4f;
+    public float apexAccelerationBonus = 3f;
+
     private float coyoteTimeCounter;
     private float jumpBufferCounter;
 
@@ -86,6 +90,9 @@ public class PlayerMovement : MonoBehaviour
             jumpBufferCounter = 0f;
         }
 
+        float apexPoint = Mathf.InverseLerp(apexThreshold, 0f, Mathf.Abs(rb.linearVelocity.y));
+        float apexBonus = apexPoint * apexAccelerationBonus;
+
         if (!Input.GetKey(KeyCode.Space) && rb.linearVelocity.y > 0.5f)
         {
             rb.gravityScale = jumpCutGravity;
@@ -98,7 +105,6 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.gravityScale = normalGravity;
         }
-
     }
 
     void Flip()
