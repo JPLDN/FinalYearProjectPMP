@@ -25,6 +25,10 @@ public class PlayerMovement : MonoBehaviour
     public float apexThreshold = 0.4f;
     public float apexAccelerationBonus = 3f;
 
+    [Header("Movement Acceleration")]
+    public float groundAcceleration = 40f;
+    public float airAcceleration = 20f;
+
     private float coyoteTimeCounter;
     private float jumpBufferCounter;
 
@@ -33,12 +37,14 @@ public class PlayerMovement : MonoBehaviour
     private bool facingRight = true;
     private bool isGrounded;
     private bool isSprinting = false;
+    private PlayerDamageHandler damageHandler;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = normalGravity;
+        damageHandler = GetComponent<PlayerDamageHandler>();
     }
 
     // Update is called once per frame
@@ -49,10 +55,20 @@ public class PlayerMovement : MonoBehaviour
         moveInput = Input.GetAxisRaw("Horizontal");
 
         float currentSpeed = isSprinting ? sprintSpeed : moveSpeed;
-        if (!GetComponent<PlayerDamageHandler>().isBeingKnockedBack)
+
+        float apexPoint = Mathf.InverseLerp(apexThreshold, 0f, Mathf.Abs(rb.linearVelocity.y));
+        float apexBonus = apexPoint * apexAccelerationBonus;
+        float adjustedSpeed = currentSpeed + apexBonus;
+
+        if (damageHandler == null || !damageHandler.isBeingKnockedBack)
         {
-            rb.linearVelocity = new Vector2(moveInput * currentSpeed, rb.linearVelocity.y);
+            float targetSpeed = moveInput * adjustedSpeed;
+            float accelRate = isGrounded ? groundAcceleration : airAcceleration;
+            float newX = Mathf.MoveTowards(rb.linearVelocity.x, targetSpeed, accelRate * Time.deltaTime);
+
+            rb.linearVelocity = new Vector2(newX, rb.linearVelocity.y); 
         }
+
 
         if (moveInput > 0 && !facingRight)
         {
@@ -89,9 +105,6 @@ public class PlayerMovement : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             jumpBufferCounter = 0f;
         }
-
-        float apexPoint = Mathf.InverseLerp(apexThreshold, 0f, Mathf.Abs(rb.linearVelocity.y));
-        float apexBonus = apexPoint * apexAccelerationBonus;
 
         if (!Input.GetKey(KeyCode.Space) && rb.linearVelocity.y > 0.5f)
         {
