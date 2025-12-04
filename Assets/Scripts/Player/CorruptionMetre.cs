@@ -76,17 +76,30 @@ public class CorruptionMetre : MonoBehaviour
         if (glitch != null) glitch.enabled = false;
 
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        float originalGravity = 0f;
+
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
+
+            originalGravity = rb.gravityScale;
+            rb.gravityScale = 0f;
+            rb.simulated = false;
         }
 
         // Apply death animation or Screen effect here
+
         yield return new WaitForSeconds(respawnDelay);
 
         transform.position = initialPosition;
 
         ResetCorruption();
+
+        if (rb != null)
+        {
+            rb.simulated = true;
+            rb.gravityScale = originalGravity;
+        }
 
         if (move != null) move.enabled = true;
         if (damage != null) damage.enabled = true;

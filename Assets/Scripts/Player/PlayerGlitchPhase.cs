@@ -17,6 +17,11 @@ public class PlayerGlitchPhase : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     public Color dashColor = Color.cyan;
 
+    [Header("Collision Settings")]
+    public string enemyLayerName = "Enemy";
+    private int playerLayer;
+    private int enemyLayer;
+
     private Rigidbody2D rb;
     private bool canDash = true;
     private bool isDashing = false;
@@ -31,6 +36,9 @@ public class PlayerGlitchPhase : MonoBehaviour
         if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
         savedGravity = rb.gravityScale;
         if (trail != null) trail.emitting = false;
+
+        playerLayer = gameObject.layer;
+        enemyLayer = LayerMask.NameToLayer(enemyLayerName);
     }
 
     void Update()
@@ -55,6 +63,8 @@ public class PlayerGlitchPhase : MonoBehaviour
         isDashing = true;
         if (trail != null) trail.emitting = true;
         isInvincible = true;
+
+        Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, true);
 
         float inputX = Input.GetAxisRaw("Horizontal");
         if (inputX != 0) dashDirection = Mathf.Sign(inputX);
@@ -103,6 +113,8 @@ public class PlayerGlitchPhase : MonoBehaviour
         if (spriteRenderer != null) spriteRenderer.color = originalColor;
 
         isDashing = false;
+        Physics2D.IgnoreLayerCollision(playerLayer, enemyLayer, false);
+
         yield return new WaitForSeconds(invincibilityTime);
         isInvincible = false;
 
