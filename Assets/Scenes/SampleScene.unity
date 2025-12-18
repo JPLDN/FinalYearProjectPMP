@@ -1512,8 +1512,20 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7338387824395226381, guid: 09cfd78d650b3f04696b83698a6cbfeb, type: 3}
+      propertyPath: fallGravity
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7338387824395226381, guid: 09cfd78d650b3f04696b83698a6cbfeb, type: 3}
       propertyPath: sprintSpeed
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7338387824395226381, guid: 09cfd78d650b3f04696b83698a6cbfeb, type: 3}
+      propertyPath: normalGravity
+      value: 2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7338387824395226381, guid: 09cfd78d650b3f04696b83698a6cbfeb, type: 3}
+      propertyPath: jumpCutGravity
+      value: 3.2
       objectReference: {fileID: 0}
     - target: {fileID: 7338387824395226381, guid: 09cfd78d650b3f04696b83698a6cbfeb, type: 3}
       propertyPath: airAcceleration
@@ -2064,6 +2076,31 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1594716635 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7081555903761683115, guid: c83ab4fd5a6b133419c544f04ac9dba3, type: 3}
+  m_PrefabInstance: {fileID: 1842708255}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &1594716639 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 1337231227853133831, guid: c83ab4fd5a6b133419c544f04ac9dba3, type: 3}
+  m_PrefabInstance: {fileID: 1842708255}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1594716641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1594716635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a14f5cae170db154caa3afc9f4d4ec00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultStunDuration: 1.2
+  spriteRenderer: {fileID: 1594716639}
+  stunnedColor: {r: 1, g: 0, b: 1, a: 1}
 --- !u!1 &1623706989
 GameObject:
   m_ObjectHideFlags: 0
@@ -2269,7 +2306,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7081555903761683115, guid: c83ab4fd5a6b133419c544f04ac9dba3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1594716641}
   m_SourcePrefab: {fileID: 100100000, guid: c83ab4fd5a6b133419c544f04ac9dba3, type: 3}
 --- !u!1 &1902312898
 GameObject:
