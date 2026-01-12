@@ -106,7 +106,7 @@ public class PlayerMovement : MonoBehaviour
             jumpBufferCounter = 0f;
         }
 
-        if (!Input.GetKey(KeyCode.Space) && rb.linearVelocity.y > 0.5f)
+        if (!Input.GetKey(KeyCode.Space) && rb.linearVelocity.y > 0.1f)
         {
             rb.gravityScale = jumpCutGravity;
         }
