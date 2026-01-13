@@ -1529,7 +1529,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7338387824395226381, guid: 09cfd78d650b3f04696b83698a6cbfeb, type: 3}
       propertyPath: jumpCutGravity
-      value: 3.2
+      value: 4.5
       objectReference: {fileID: 0}
     - target: {fileID: 7338387824395226381, guid: 09cfd78d650b3f04696b83698a6cbfeb, type: 3}
       propertyPath: airAcceleration
