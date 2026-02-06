@@ -44,10 +44,10 @@ public class PlayerDamageHandler : MonoBehaviour
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
-            rb.linearVelocity = new Vector2(direction.x * knockBackForce, knockBackUpForce);
+            rb.linearVelocity = new Vector2(direction.x * knockBackForce, knockBackUpForce); // Knockback
         }
 
-        yield return new WaitForSeconds(knockBackDuration);
+        yield return new WaitForSeconds(knockBackDuration); // Cooldown for being knocked back
         isBeingKnockedBack = false;
     }
 
@@ -55,9 +55,9 @@ public class PlayerDamageHandler : MonoBehaviour
     {
         if (sr != null)
         {
-            sr.color = Color.white;
-            yield return new WaitForSeconds(flashDuration);
-            sr.color = originalColor;
+            sr.color = Color.white; // changing the colour upon being hit
+            yield return new WaitForSeconds(flashDuration); // duration of the flash
+            sr.color = originalColor; // return back to original colour
         }
     }
 
@@ -81,18 +81,30 @@ public class PlayerDamageHandler : MonoBehaviour
     {
         if (collision.collider.CompareTag("Enemy") || collision.collider.CompareTag("Hazard"))
         {
+            if (collision.collider.CompareTag("Enemy"))
+            {
+                EnemyStunned stunned = collision.collider.GetComponent<EnemyStunned>(); // Enemy is stunned, player should not take damage whilst they are stunned
+                if (stunned != null && stunned.IsStunned)
+                {
+                    Debug.Log("Enemy is Stunned!");
+                    return;
+                }
+            }
+
+            // Invincibility Check
             if (glitchPhase != null && glitchPhase.IsInvincible())
             {
                 Debug.Log("Player is invincible, no damage taken.");
                 return;
             }
 
+            // Adding Corruption Check
             if (corruptionMetre != null)
             {
                 corruptionMetre.AddCorruption(corruptionPerHit);
                 Debug.Log("Player took damage, corruption increased.");
             }
-
+            // hit feedback + knock back
             StartCoroutine(HitFlicker());
             StartCoroutine(HitFlash());
             Vector2 knockDir = (transform.position - collision.transform.position).normalized;
