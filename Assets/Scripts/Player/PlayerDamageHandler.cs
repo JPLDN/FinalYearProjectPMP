@@ -20,10 +20,16 @@ public class PlayerDamageHandler : MonoBehaviour
     public float flickerDuration = 0.5f;
     public float flickerSpeed = 0.2f;
 
+    [Header("Contact Damage")]
+    public float contactDamageCooldown = 0.6f;
+    private float nextDamageTime = 0f;
+
     [Header("Flash Effect")]
     public float flashDuration = 0.2f;
     private SpriteRenderer sr;
     private Color originalColor;
+
+
 
     void Start()
     {
@@ -104,6 +110,7 @@ public class PlayerDamageHandler : MonoBehaviour
                 corruptionMetre.AddCorruption(corruptionPerHit);
                 Debug.Log("Player took damage, corruption increased.");
             }
+
             // hit feedback + knock back
             StartCoroutine(HitFlicker());
             StartCoroutine(HitFlash());
