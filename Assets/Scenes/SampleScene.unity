@@ -2252,6 +2252,10 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -4420666313497233794, guid: c83ab4fd5a6b133419c544f04ac9dba3, type: 3}
+      propertyPath: m_BodyType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4420666313497233794, guid: c83ab4fd5a6b133419c544f04ac9dba3, type: 3}
       propertyPath: m_Interpolate
       value: 1
       objectReference: {fileID: 0}
