@@ -83,39 +83,46 @@ public class PlayerDamageHandler : MonoBehaviour
         }
     }
 
+    private void HandleContactDamage(Collider2D col)
+    {
+        // cooldown to prevent taking damage every single frame
+        if (Time.time < nextDamageTime) return;
+
+        if (!(col.CompareTag("Enemy") || col.CompareTag("Hazard")))
+            return;
+
+        if (col.CompareTag("Enemy"))
+        {
+            EnemyStunned stunned = col.GetComponent<EnemyStunned>(); // Enemy is stunned, player should not take damage whilst they are stunned
+            if (stunned != null && stunned.IsStunned)
+                return;
+        }
+
+        // Invincibility Check
+        if (glitchPhase != null && glitchPhase.IsInvincible())
+            return;
+        // applying the corruption points 
+        if (corruptionMetre != null)
+            corruptionMetre.AddCorruption(corruptionPerHit);
+
+        // hit feedback + knock back
+        StartCoroutine(HitFlicker());
+        StartCoroutine(HitFlash());
+
+        Vector2 knockDir = (transform.position - col.transform.position).normalized;
+        StartCoroutine(Knockback(knockDir));
+
+        // setting the cooldown for contact damage
+        nextDamageTime = Time.time + contactDamageCooldown;
+    }
+
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("Enemy") || collision.collider.CompareTag("Hazard"))
-        {
-            if (collision.collider.CompareTag("Enemy"))
-            {
-                EnemyStunned stunned = collision.collider.GetComponent<EnemyStunned>(); // Enemy is stunned, player should not take damage whilst they are stunned
-                if (stunned != null && stunned.IsStunned)
-                {
-                    Debug.Log("Enemy is Stunned!");
-                    return;
-                }
-            }
+        HandleContactDamage(collision.collider);
+    }
 
-            // Invincibility Check
-            if (glitchPhase != null && glitchPhase.IsInvincible())
-            {
-                Debug.Log("Player is invincible, no damage taken.");
-                return;
-            }
-
-            // Adding Corruption Check
-            if (corruptionMetre != null)
-            {
-                corruptionMetre.AddCorruption(corruptionPerHit);
-                Debug.Log("Player took damage, corruption increased.");
-            }
-
-            // hit feedback + knock back
-            StartCoroutine(HitFlicker());
-            StartCoroutine(HitFlash());
-            Vector2 knockDir = (transform.position - collision.transform.position).normalized;
-            StartCoroutine(Knockback(knockDir));
-        }
+    public void OnCollisionStay2D(Collision2D collision)
+    {
+        HandleContactDamage(collision.collider);
     }
 }
