@@ -2714,7 +2714,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1354004670792483757, guid: a96d82a9dd427b648b3b0f28808d0ecc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.57
+      value: 2.559
       objectReference: {fileID: 0}
     - target: {fileID: 1354004670792483757, guid: a96d82a9dd427b648b3b0f28808d0ecc, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2751,6 +2751,14 @@ PrefabInstance:
     - target: {fileID: 4140230253938200490, guid: a96d82a9dd427b648b3b0f28808d0ecc, type: 3}
       propertyPath: m_Name
       value: EnemyChaser
+      objectReference: {fileID: 0}
+    - target: {fileID: 4140230253938200490, guid: a96d82a9dd427b648b3b0f28808d0ecc, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4140230253938200490, guid: a96d82a9dd427b648b3b0f28808d0ecc, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
