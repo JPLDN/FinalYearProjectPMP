@@ -64,5 +64,22 @@ public class EnemyChase : MonoBehaviour
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y); // stop moving if close enough to the player
             return;
         }
+
+        float dir = Mathf.Sign(dx);
+
+        bool groundAhead = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, groundLayer); // ground edge check
+
+        bool wallAhead = Physics2D.Raycast(wallCheck.position, Vector2.right * dir, wallCheckDistance, obstacleLayer); // wall in front check
+
+        if (!groundAhead || wallAhead)
+        {
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        }
+
+        rb.linearVelocity = new Vector2(dir * chaseSpeed, rb.linearVelocity.y);
+
+        Vector3 s = transform.localScale;
+        s.x = Mathf.Abs(s.x) * dir;
+        transform.localScale = s;
     }
 }
