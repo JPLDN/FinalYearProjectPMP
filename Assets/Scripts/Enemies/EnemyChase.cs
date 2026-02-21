@@ -22,6 +22,7 @@ public class EnemyChase : MonoBehaviour
     private Rigidbody2D rb;
     private Transform player;
     private EnemyStunned stunned;
+    private float facingDir = 1f;
 
     void Awake()
     {
@@ -32,7 +33,7 @@ public class EnemyChase : MonoBehaviour
     void Start()
     {
         GameObject p = GameObject.FindGameObjectWithTag(playerTag);
-        if (p != null) player = player.transform;
+        if (p != null) player = p.transform;
     }
 
     private void FixedUpdate()
@@ -46,10 +47,9 @@ public class EnemyChase : MonoBehaviour
         if (player == null)
         {
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y); // if there's no player, stop movement
+            return;
         }
-
         float dist = Vector2.Distance(transform.position, player.position);
-
 
         // chases the player when in detection range
         if (dist > detectionRange)
@@ -65,21 +65,30 @@ public class EnemyChase : MonoBehaviour
             return;
         }
 
-        float dir = Mathf.Sign(dx);
+        float desiredDir = Mathf.Sign(dx);
+        facingDir = Mathf.Sign(desiredDir); // face the direction of the player
 
         bool groundAhead = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, groundLayer); // ground edge check
 
-        bool wallAhead = Physics2D.Raycast(wallCheck.position, Vector2.right * dir, wallCheckDistance, obstacleLayer); // wall in front check
+        bool wallAhead = Physics2D.Raycast(wallCheck.position, Vector2.right * facingDir, wallCheckDistance, obstacleLayer); // wall in front check
 
         if (!groundAhead || wallAhead)
         {
-            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            facingDir *= -1f; // turn around if there's no ground ahead or a wall in front
+
+            // Flipping of the sprite to face the new direction
+            Vector3 sFlip = transform.localScale;
+            sFlip.x = Mathf.Abs(sFlip.x) * facingDir;
+            transform.localScale = sFlip;
+
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y); // stop movement when turning around
+            return;
         }
 
-        rb.linearVelocity = new Vector2(dir * chaseSpeed, rb.linearVelocity.y);
+        rb.linearVelocity = new Vector2(facingDir * chaseSpeed, rb.linearVelocity.y);
 
         Vector3 s = transform.localScale;
-        s.x = Mathf.Abs(s.x) * dir;
+        s.x = Mathf.Abs(s.x) * facingDir;
         transform.localScale = s;
     }
 }

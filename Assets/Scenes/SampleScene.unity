@@ -1572,6 +1572,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 09cfd78d650b3f04696b83698a6cbfeb, type: 3}
+--- !u!4 &1047754948 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5888024823573027996, guid: a96d82a9dd427b648b3b0f28808d0ecc, type: 3}
+  m_PrefabInstance: {fileID: 8304908426339586374}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1125947732
 GameObject:
   m_ObjectHideFlags: 0
@@ -2708,9 +2713,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7472138480579583039, guid: a96d82a9dd427b648b3b0f28808d0ecc, type: 3}
+      propertyPath: wallCheck
+      value: 
+      objectReference: {fileID: 1047754948}
+    - target: {fileID: -7472138480579583039, guid: a96d82a9dd427b648b3b0f28808d0ecc, type: 3}
+      propertyPath: detectionRange
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -7472138480579583039, guid: a96d82a9dd427b648b3b0f28808d0ecc, type: 3}
+      propertyPath: groundLayer.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -7472138480579583039, guid: a96d82a9dd427b648b3b0f28808d0ecc, type: 3}
+      propertyPath: obstacleLayer.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
     - target: {fileID: 1354004670792483757, guid: a96d82a9dd427b648b3b0f28808d0ecc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16.679596
+      value: -20.25
       objectReference: {fileID: 0}
     - target: {fileID: 1354004670792483757, guid: a96d82a9dd427b648b3b0f28808d0ecc, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2784,7 +2805,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8304908426339586375}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
