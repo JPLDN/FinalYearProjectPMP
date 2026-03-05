@@ -1,6 +1,6 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class CorruptionMetre : MonoBehaviour
 {
@@ -15,13 +15,16 @@ public class CorruptionMetre : MonoBehaviour
     public Transform respawnPoint;
     public float respawnDelay = 1f;
 
-    private bool isDead = false;
+    [Header("Hazard Penalty")]
+    public float hazardPenalty = 20f; // amount of corruption added when hitting a hazard
+
+    private bool isGameOver = false;     // corruption max -> game over
+    private bool isRespawning = false;   // hazards -> respawn coroutine running
     private Vector3 initialPosition;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (corruptionSlider != null) 
+        if (corruptionSlider != null)
             corruptionSlider.maxValue = maxCorruption;
 
         UpdateUI();
@@ -29,14 +32,9 @@ public class CorruptionMetre : MonoBehaviour
         initialPosition = respawnPoint != null ? respawnPoint.position : transform.position;
     }
 
-    void Update()
-    {
-        
-    }
-    
     public void AddCorruption(float amount)
     {
-        if (isDead) return;
+        if (isGameOver) return; // stop taking damage once game over is triggered
 
         currentCorruption += amount;
         currentCorruption = Mathf.Clamp(currentCorruption, 0, maxCorruption);
@@ -45,28 +43,60 @@ public class CorruptionMetre : MonoBehaviour
 
         if (currentCorruption >= maxCorruption)
         {
-            Die();
+            GameOver();
         }
     }
 
-    // Update is called once per frame
     private void UpdateUI()
     {
         if (corruptionSlider != null)
             corruptionSlider.value = currentCorruption;
     }
 
-    private void Die()
+    private void GameOver()
     {
-        if (isDead) return;
-        isDead = true;
-        Debug.Log("You have been corrupted! Respawning...");
+        if (isGameOver) return;
+        isGameOver = true;
+
+        Debug.Log("You have been corrupted! Game Over.");
+
+        // Disable player controls when dead
+        PlayerMovement move = GetComponent<PlayerMovement>();
+        PlayerDamageHandler damage = GetComponent<PlayerDamageHandler>();
+        PlayerGlitchPhase glitch = GetComponent<PlayerGlitchPhase>();
+
+        if (move != null) move.enabled = false;
+        if (damage != null) damage.enabled = false;
+        if (glitch != null) glitch.enabled = false;
+
+        // Freeze physics so the body doesn't keep falling
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.simulated = false;
+        }
+
+        // Show Game Over UI
+        GameOverUI gameOver = FindObjectOfType<GameOverUI>();
+        if (gameOver != null)
+            gameOver.ShowGameOver();
+        else
+            Debug.LogWarning("GameOverUI not found in scene.");
+    }
+
+    public void Respawn()
+    {
+        if (isGameOver) return;      // don't respawn if game over screen is active
+        if (isRespawning) return;    // prevent multiple respawn coroutines
+
         StartCoroutine(HandleDeathAndRespawn());
     }
 
     private IEnumerator HandleDeathAndRespawn()
     {
-        // disables player control when dead
+        isRespawning = true;
+
         PlayerMovement move = GetComponent<PlayerMovement>();
         PlayerDamageHandler damage = GetComponent<PlayerDamageHandler>();
         PlayerGlitchPhase glitch = GetComponent<PlayerGlitchPhase>();
@@ -81,19 +111,16 @@ public class CorruptionMetre : MonoBehaviour
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;
-
             originalGravity = rb.gravityScale;
             rb.gravityScale = 0f;
             rb.simulated = false;
         }
 
-        // Apply death animation or Screen effect here
-
         yield return new WaitForSeconds(respawnDelay);
 
         transform.position = initialPosition;
 
-        ResetCorruption();
+        ResetCorruption(); 
 
         if (rb != null)
         {
@@ -105,8 +132,9 @@ public class CorruptionMetre : MonoBehaviour
         if (damage != null) damage.enabled = true;
         if (glitch != null) glitch.enabled = true;
 
-        isDead = false;
+        isRespawning = false;
     }
+
     public void ResetCorruption()
     {
         currentCorruption = 0f;
@@ -114,10 +142,16 @@ public class CorruptionMetre : MonoBehaviour
     }
     public void KillInstant()
     {
-        if (isDead) return;
+        if (isGameOver || isRespawning) return; // prevent killing if already game over or respawning
 
-        currentCorruption = maxCorruption;
+        currentCorruption = Mathf.Clamp(currentCorruption + hazardPenalty, 0, maxCorruption); // Add hazard penalty and chceck if it causes game over
         UpdateUI();
-        Die();
+
+        if (currentCorruption >= maxCorruption)
+        {
+            GameOver();
+            return;
+        }
+        Respawn(); // Otherwise just respawn without game over
     }
 }
