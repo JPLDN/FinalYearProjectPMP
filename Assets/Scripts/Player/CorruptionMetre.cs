@@ -15,9 +15,6 @@ public class CorruptionMetre : MonoBehaviour
     public Transform respawnPoint;
     public float respawnDelay = 1f;
 
-    [Header("Hazard Penalty")]
-    public float hazardPenalty = 20f; // amount of corruption added when hitting a hazard
-
     private bool isGameOver = false;     // corruption max -> game over
     private bool isRespawning = false;   // hazards -> respawn coroutine running
     private Vector3 initialPosition;
@@ -142,16 +139,12 @@ public class CorruptionMetre : MonoBehaviour
     }
     public void KillInstant()
     {
-        if (isGameOver || isRespawning) return; // prevent killing if already game over or respawning
+        if (isGameOver) return; // prevent killing if already game over or respawning
 
-        currentCorruption = Mathf.Clamp(currentCorruption + hazardPenalty, 0, maxCorruption); // Add hazard penalty and chceck if it causes game over
-        UpdateUI();
-
-        if (currentCorruption >= maxCorruption)
-        {
-            GameOver();
-            return;
-        }
-        Respawn(); // Otherwise just respawn without game over
+        GameOverUI gameOver = FindObjectOfType<GameOverUI>();
+        if (gameOver != null)
+            gameOver.ShowGameOver();
+        else
+            Debug.LogWarning("GameOverUI not found in scene.");
     }
 }
